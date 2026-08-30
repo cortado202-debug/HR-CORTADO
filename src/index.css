@@ -39,8 +39,8 @@ input, select, textarea {
 
 @media print {
   @page {
-    size: auto;
-    margin: 8mm 6mm;
+    size: A4 portrait;
+    margin: 5mm 6mm;
   }
 
   *, *::before, *::after {
@@ -56,8 +56,7 @@ input, select, textarea {
     color: #000000 !important;
     margin: 0 !important;
     padding: 0 !important;
-    height: auto !important;
-    min-height: 0 !important;
+    height: 100% !important;
     width: 100% !important;
     overflow: visible !important;
   }
@@ -108,17 +107,36 @@ input, select, textarea {
     max-height: none !important;
   }
 
-  /* Target printable document containers specifically */
-  #employee-monthly-statement-printable,
+  /* Target printable document containers specifically to fit 1 page A4 */
+  #employee-monthly-statement-printable {
+    border: 1px solid #94a3b8 !important;
+    box-shadow: none !important;
+    margin: 0 auto !important;
+    padding: 8px 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    background: #ffffff !important;
+  }
+
+  #employee-monthly-statement-printable table th,
+  #employee-monthly-statement-printable table td {
+    padding: 2.5px 5px !important;
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+  }
+
   #monthly-payroll-table-printable,
   #advance-receipt-printable {
     border: 1px solid #94a3b8 !important;
     box-shadow: none !important;
     margin: 0 auto !important;
-    padding: 14px 16px !important;
+    padding: 10px 14px !important;
     width: 100% !important;
     max-width: 100% !important;
-    page-break-inside: auto;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
     background: #ffffff !important;
   }
 

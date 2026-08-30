@@ -57,28 +57,32 @@ export async function downloadPdfFromElement(
     // Remove cloned element
     document.body.removeChild(clone);
 
-    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+    const imgData = canvas.toDataURL('image/jpeg', 0.96);
     const pdf = new jsPDF('p', 'mm', 'a4');
     const pdfWidth = pdf.internal.pageSize.getWidth(); // 210mm
     const pdfHeight = pdf.internal.pageSize.getHeight(); // 297mm
 
-    const imgWidth = pdfWidth;
-    const imgHeight = (canvas.height * pdfWidth) / canvas.width;
+    const marginX = 8;
+    const marginY = 8;
+    const availableWidth = pdfWidth - marginX * 2;
+    const availableHeight = pdfHeight - marginY * 2;
 
-    let heightLeft = imgHeight;
-    let position = 0;
+    // Calculate dimensions to fit completely on single page
+    let imgWidth = availableWidth;
+    let imgHeight = (canvas.height * availableWidth) / canvas.width;
 
-    // Add first page
-    pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
-    heightLeft -= pdfHeight;
-
-    // Add subsequent pages if document is longer than 1 page
-    while (heightLeft > 0) {
-      position = heightLeft - imgHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'FAST');
-      heightLeft -= pdfHeight;
+    // If height exceeds available single page height, scale down proportionally to fit 1 single page
+    if (imgHeight > availableHeight) {
+      const ratio = availableHeight / imgHeight;
+      imgHeight = availableHeight;
+      imgWidth = imgWidth * ratio;
     }
+
+    const posX = marginX + (availableWidth - imgWidth) / 2;
+    const posY = marginY;
+
+    // Render single high-quality page
+    pdf.addImage(imgData, 'JPEG', posX, posY, imgWidth, imgHeight, undefined, 'FAST');
 
     const safeFilename = filename.endsWith('.pdf') ? filename : `${filename}.pdf`;
     pdf.save(safeFilename);

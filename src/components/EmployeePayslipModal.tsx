@@ -246,15 +246,15 @@ export const EmployeePayslipModal: React.FC<EmployeePayslipModalProps> = ({
           >
             
             {/* Header / Company Branding */}
-            <div className="flex items-start justify-between pb-4 mb-4 border-b-2 border-slate-900">
-              <div className="space-y-1">
-                <h1 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+            <div className="flex items-start justify-between pb-3 mb-3 border-b-2 border-slate-900">
+              <div className="space-y-0.5">
+                <h1 className="text-base sm:text-lg font-black text-slate-900 tracking-tight">
                   {settings.companyName || 'المنشأة التجارية'}
                 </h1>
-                <p className="text-xs font-semibold text-slate-600">
+                <p className="text-[11px] font-semibold text-slate-600">
                   إدارة الموارد البشرية والشؤون المالية والمحاسبية
                 </p>
-                <div className="flex items-center gap-2 text-[11px] text-slate-500 pt-0.5">
+                <div className="flex items-center gap-2 text-[10px] text-slate-500 pt-0.5">
                   <span>الرقم المرجعي: <strong className="font-mono text-slate-700 font-bold">STMT-{currentEmployee.id.slice(0, 5).toUpperCase()}-{selectedMonth.replace('-', '')}</strong></span>
                   <span>•</span>
                   <span>تاريخ الطباعة: <strong className="font-mono text-slate-700 font-bold">{todayStr}</strong></span>
@@ -263,115 +263,115 @@ export const EmployeePayslipModal: React.FC<EmployeePayslipModalProps> = ({
 
               <div className="flex flex-col items-end">
                 {settings.logoUrl ? (
-                  <img src={settings.logoUrl} alt="Logo" className="h-12 w-12 object-contain border border-slate-200 rounded-lg p-1 bg-white" />
+                  <img src={settings.logoUrl} alt="Logo" className="h-10 w-10 object-contain border border-slate-200 rounded-lg p-0.5 bg-white" />
                 ) : (
-                  <div className="w-10 h-10 bg-slate-900 text-white rounded-lg flex items-center justify-center font-black text-base shadow-2xs">
-                    <Building2 className="w-5 h-5" />
+                  <div className="w-8 h-8 bg-slate-900 text-white rounded-lg flex items-center justify-center font-black text-sm shadow-2xs">
+                    <Building2 className="w-4 h-4" />
                   </div>
                 )}
-                <span className="text-[10px] font-bold text-slate-400 mt-1 uppercase font-mono tracking-widest">
+                <span className="text-[9px] font-bold text-slate-400 mt-0.5 uppercase font-mono tracking-widest">
                   OFFICIAL PAYSLIP & AUDIT
                 </span>
               </div>
             </div>
 
             {/* Document Title Banner */}
-            <div className="py-2 px-4 mb-4 bg-slate-900 text-white rounded-lg flex items-center justify-between shadow-2xs">
-              <div className="flex items-center gap-2 font-bold text-xs sm:text-sm">
-                <FileText className="w-4 h-4 text-emerald-400" />
+            <div className="py-1.5 px-3 mb-3 bg-slate-900 text-white rounded-lg flex items-center justify-between shadow-2xs">
+              <div className="flex items-center gap-2 font-bold text-xs">
+                <FileText className="w-3.5 h-3.5 text-emerald-400" />
                 <span>كشف حساب شهري تفصيلي للموظف (مستحقات وسلف وغيابات)</span>
               </div>
-              <div className="font-bold text-xs font-mono text-emerald-400 bg-slate-800 px-2.5 py-0.5 rounded border border-slate-700">
+              <div className="font-bold text-[11px] font-mono text-emerald-400 bg-slate-800 px-2 py-0.5 rounded border border-slate-700">
                 الشهر: {selectedMonth}
               </div>
             </div>
 
             {/* Employee Identification Card */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 p-3.5 bg-[#F8FAFC] rounded-lg border border-slate-200 mb-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 p-2.5 bg-[#F8FAFC] rounded-lg border border-slate-200 mb-3">
               <div>
-                <span className="text-slate-400 text-[10px] block font-semibold">اسم الموظف:</span>
-                <strong className="text-slate-900 text-xs sm:text-sm font-bold block">{currentEmployee.name}</strong>
+                <span className="text-slate-400 text-[9px] block font-semibold">اسم الموظف:</span>
+                <strong className="text-slate-900 text-xs font-bold block">{currentEmployee.name}</strong>
               </div>
               <div>
-                <span className="text-slate-400 text-[10px] block font-semibold">المسمى الوظيفي:</span>
+                <span className="text-slate-400 text-[9px] block font-semibold">المسمى الوظيفي:</span>
                 <strong className="text-slate-800 text-xs font-bold block">{currentEmployee.jobTitle}</strong>
               </div>
               <div>
-                <span className="text-slate-400 text-[10px] block font-semibold">الراتب الأساسي التعاقدي:</span>
-                <strong className="text-slate-900 font-mono font-bold block text-xs">{formatSYP(currentSummary.baseSalary)}</strong>
+                <span className="text-slate-400 text-[9px] block font-semibold">الراتب الأساسي التعاقدي:</span>
+                <strong className="text-slate-900 font-mono font-bold block text-[11px]">{formatSYP(currentSummary.baseSalary)}</strong>
               </div>
               <div>
-                <span className="text-slate-400 text-[10px] block font-semibold">أجر اليوم / الساعة المحتسب:</span>
-                <strong className="text-slate-700 font-mono text-xs block">
+                <span className="text-slate-400 text-[9px] block font-semibold">أجر اليوم / الساعة المحتسب:</span>
+                <strong className="text-slate-700 font-mono text-[11px] block">
                   {formatSYP(currentSummary.dailyRate, false)} / {formatSYP(currentSummary.hourlyRate, false)} ل.س
                 </strong>
               </div>
               <div>
-                <span className="text-slate-400 text-[10px] block font-semibold">رقم الهاتف:</span>
-                <span className="text-slate-700 font-mono text-xs font-semibold block">{currentEmployee.phone || 'غير مسجل'}</span>
+                <span className="text-slate-400 text-[9px] block font-semibold">رقم الهاتف:</span>
+                <span className="text-slate-700 font-mono text-[11px] font-semibold block">{currentEmployee.phone || 'غير مسجل'}</span>
               </div>
               <div>
-                <span className="text-slate-400 text-[10px] block font-semibold">تاريخ المباشرة:</span>
-                <span className="text-slate-700 font-mono text-xs block">{currentEmployee.joinedDate || '—'}</span>
+                <span className="text-slate-400 text-[9px] block font-semibold">تاريخ المباشرة:</span>
+                <span className="text-slate-700 font-mono text-[11px] block">{currentEmployee.joinedDate || '—'}</span>
               </div>
               <div>
-                <span className="text-slate-400 text-[10px] block font-semibold">شفت الدوام المعتمد:</span>
+                <span className="text-slate-400 text-[9px] block font-semibold">شفت الدوام المعتمد:</span>
                 <span className="text-slate-800 font-bold text-[11px] block">{matchedShift.name}</span>
               </div>
               <div>
-                <span className="text-slate-400 text-[10px] block font-semibold">ساعات الدوام اليومي:</span>
-                <span className="text-slate-800 font-semibold text-[11px] block">{currentEmployee.dailyWorkHours || 8} ساعات ({currentEmployee.monthlyWorkDays || 26} يوم)</span>
+                <span className="text-slate-400 text-[9px] block font-semibold">ساعات الدوام اليومي:</span>
+                <span className="text-slate-800 font-semibold text-[11px] block">{currentEmployee.dailyWorkHours || 8}س ({currentEmployee.monthlyWorkDays || 26} يوم)</span>
               </div>
             </div>
 
             {/* Financial Summary KPI Cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-5">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
               
-              <div className="p-2.5 rounded-lg border border-slate-200 bg-white shadow-2xs">
-                <div className="text-[10px] font-bold text-slate-500 flex items-center justify-between">
+              <div className="p-2 rounded-lg border border-slate-200 bg-white shadow-2xs">
+                <div className="text-[9px] font-bold text-slate-500 flex items-center justify-between">
                   <span>الراتب الأساسي</span>
                   <DollarSign className="w-3 h-3 text-slate-400" />
                 </div>
-                <div className="text-sm font-bold font-mono text-slate-900 mt-1">
+                <div className="text-xs font-bold font-mono text-slate-900 mt-0.5">
                   {formatSYP(currentSummary.baseSalary)}
                 </div>
               </div>
 
-              <div className="p-2.5 rounded-lg border border-rose-200 bg-rose-50/50 shadow-2xs">
-                <div className="text-[10px] font-bold text-rose-800 flex items-center justify-between">
+              <div className="p-2 rounded-lg border border-rose-200 bg-rose-50/50 shadow-2xs">
+                <div className="text-[9px] font-bold text-rose-800 flex items-center justify-between">
                   <span>خصومات الدوام والغياب</span>
                   <AlertCircle className="w-3 h-3 text-rose-500" />
                 </div>
-                <div className="text-sm font-bold font-mono text-rose-700 mt-1">
+                <div className="text-xs font-bold font-mono text-rose-700 mt-0.5">
                   -{formatSYP(currentSummary.totalDeductions)}
                 </div>
-                <div className="text-[9px] text-rose-600 font-semibold mt-0.5">
+                <div className="text-[8.5px] text-rose-600 font-semibold">
                   ({currentSummary.daysAbsent} غياب | {currentSummary.daysLate} تأخير | {currentSummary.totalDepartureHours}س مغادرة)
                 </div>
               </div>
 
-              <div className="p-2.5 rounded-lg border border-amber-200 bg-amber-50/50 shadow-2xs">
-                <div className="text-[10px] font-bold text-amber-800 flex items-center justify-between">
+              <div className="p-2 rounded-lg border border-amber-200 bg-amber-50/50 shadow-2xs">
+                <div className="text-[9px] font-bold text-amber-800 flex items-center justify-between">
                   <span>إجمالي السلف المقتطعة</span>
                   <Receipt className="w-3 h-3 text-amber-600" />
                 </div>
-                <div className="text-sm font-bold font-mono text-amber-800 mt-1">
+                <div className="text-xs font-bold font-mono text-amber-800 mt-0.5">
                   -{formatSYP(currentSummary.totalAdvances)}
                 </div>
-                <div className="text-[9px] text-amber-700 font-semibold mt-0.5">
+                <div className="text-[8.5px] text-amber-700 font-semibold">
                   ({currentSummary.advancesCount} سلفة مسحوبة)
                 </div>
               </div>
 
-              <div className="p-2.5 rounded-lg border border-emerald-300 bg-emerald-50 shadow-2xs">
-                <div className="text-[10px] font-bold text-emerald-900 flex items-center justify-between">
+              <div className="p-2 rounded-lg border border-emerald-300 bg-emerald-50 shadow-2xs">
+                <div className="text-[9px] font-bold text-emerald-900 flex items-center justify-between">
                   <span>صافي الراتب المستحق</span>
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                 </div>
-                <div className="text-base font-black font-mono text-emerald-950 mt-1">
+                <div className="text-sm font-black font-mono text-emerald-950 mt-0.5">
                   {formatSYP(currentSummary.netSalary)}
                 </div>
-                <div className="text-[9px] text-emerald-700 font-semibold mt-0.5">
+                <div className="text-[8.5px] text-emerald-700 font-semibold">
                   جاهز للصرف النهائي
                 </div>
               </div>
@@ -379,65 +379,65 @@ export const EmployeePayslipModal: React.FC<EmployeePayslipModalProps> = ({
             </div>
 
             {/* SECTION 1: DETAILED SALARY ADVANCES LOG (كشف السلف المسحوبة بالتفصيل) */}
-            <div className="mb-5">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="font-extrabold text-xs sm:text-sm text-slate-900 flex items-center gap-1.5">
-                  <Receipt className="w-4 h-4 text-amber-600" />
+            <div className="mb-3">
+              <div className="flex items-center justify-between mb-1">
+                <h3 className="font-extrabold text-[11px] sm:text-xs text-slate-900 flex items-center gap-1.5">
+                  <Receipt className="w-3.5 h-3.5 text-amber-600" />
                   <span>أولاً: كشف السلف المالية المسحوبة خلال الشهر ({employeeMonthAdvances.length} سلفة)</span>
                 </h3>
-                <span className="text-[11px] font-bold text-amber-900 bg-amber-100/80 px-2 py-0.5 rounded font-mono">
+                <span className="text-[10px] font-bold text-amber-900 bg-amber-100/80 px-1.5 py-0.5 rounded font-mono">
                   إجمالي السلف: {formatSYP(currentSummary.totalAdvances)}
                 </span>
               </div>
 
               <div className="border border-slate-200 rounded-lg overflow-hidden">
-                <table className="w-full text-right border-collapse text-xs">
-                  <thead className="bg-[#F8FAFC] text-slate-700 font-bold border-b border-slate-200 text-[11px]">
+                <table className="w-full text-right border-collapse text-[10px]">
+                  <thead className="bg-[#F8FAFC] text-slate-700 font-bold border-b border-slate-200 text-[10px]">
                     <tr>
-                      <th className="p-2 w-10 text-center">#</th>
-                      <th className="p-2">تاريخ السلفة</th>
-                      <th className="p-2">الوقت</th>
-                      <th className="p-2">البيان وملاحظات السلفة</th>
-                      <th className="p-2 text-center">حالة الصرف</th>
-                      <th className="p-2 text-left">مبلغ السلفة (ل.س)</th>
+                      <th className="p-1.5 w-8 text-center">#</th>
+                      <th className="p-1.5">تاريخ السلفة</th>
+                      <th className="p-1.5">الوقت</th>
+                      <th className="p-1.5">البيان وملاحظات السلفة</th>
+                      <th className="p-1.5 text-center">حالة الصرف</th>
+                      <th className="p-1.5 text-left">مبلغ السلفة (ل.س)</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {employeeMonthAdvances.length > 0 ? (
                       employeeMonthAdvances.map((adv, idx) => (
                         <tr key={adv.id} className={idx % 2 === 0 ? 'bg-white' : 'bg-[#F8FAFC]/50'}>
-                          <td className="p-2 text-center font-mono font-bold text-slate-400">{idx + 1}</td>
-                          <td className="p-2 font-mono font-bold text-slate-800">
-                            {adv.date} <span className="text-[10px] text-slate-500 font-normal">({getDayOfWeekArabic(adv.date)})</span>
+                          <td className="p-1.5 text-center font-mono font-bold text-slate-400">{idx + 1}</td>
+                          <td className="p-1.5 font-mono font-bold text-slate-800">
+                            {adv.date} <span className="text-[9px] text-slate-500 font-normal">({getDayOfWeekArabic(adv.date)})</span>
                           </td>
-                          <td className="p-2 font-mono text-slate-600">{adv.time || '—'}</td>
-                          <td className="p-2 text-slate-700">{adv.note || <span className="text-slate-400 italic">سلفة نقدية على الراتب</span>}</td>
-                          <td className="p-2 text-center">
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-50 text-emerald-800 text-[10px] font-bold rounded border border-emerald-200">
+                          <td className="p-1.5 font-mono text-slate-600">{adv.time || '—'}</td>
+                          <td className="p-1.5 text-slate-700">{adv.note || <span className="text-slate-400 italic">سلفة نقدية على الراتب</span>}</td>
+                          <td className="p-1.5 text-center">
+                            <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-emerald-50 text-emerald-800 text-[9px] font-bold rounded border border-emerald-200">
                               <CheckCircle2 className="w-2.5 h-2.5 text-emerald-600" />
                               <span>تم الصرف</span>
                             </span>
                           </td>
-                          <td className="p-2 font-mono font-bold text-amber-900 text-left text-xs sm:text-sm">
+                          <td className="p-1.5 font-mono font-bold text-amber-900 text-left text-xs">
                             {formatSYP(adv.amount)}
                           </td>
                         </tr>
                       ))
                     ) : (
                       <tr>
-                        <td colSpan={6} className="p-4 text-center text-slate-400 text-xs italic bg-[#F8FAFC]/30">
+                        <td colSpan={6} className="p-2 text-center text-slate-400 text-[10px] italic bg-[#F8FAFC]/30">
                           لا توجد أي سلف مالية مسحوبة لهذا الموظف خلال شهر {selectedMonth}.
                         </td>
                       </tr>
                     )}
                   </tbody>
                   {employeeMonthAdvances.length > 0 && (
-                    <tfoot className="bg-[#FFFBEB] font-bold border-t border-amber-200 text-xs">
+                    <tfoot className="bg-[#FFFBEB] font-bold border-t border-amber-200 text-[10px]">
                       <tr>
-                        <td colSpan={5} className="p-2 text-slate-800">
+                        <td colSpan={5} className="p-1.5 text-slate-800">
                           مجموع السلف المستقطعة من الراتب:
                         </td>
-                        <td className="p-2 font-mono font-bold text-amber-950 text-left text-sm">
+                        <td className="p-1.5 font-mono font-bold text-amber-950 text-left text-xs">
                           {formatSYP(currentSummary.totalAdvances)}
                         </td>
                       </tr>
@@ -448,24 +448,24 @@ export const EmployeePayslipModal: React.FC<EmployeePayslipModalProps> = ({
             </div>
 
             {/* SECTION 2: DETAILED ATTENDANCE, ABSENCES, DELAYS & DEPARTURES LOG (سجل الحضور والغياب والمغادرات) */}
-            <div className="mb-6">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="font-extrabold text-xs sm:text-sm text-slate-900 flex items-center gap-1.5">
-                  <Clock className="w-4 h-4 text-slate-800" />
+            <div className="mb-3">
+              <div className="flex items-center justify-between mb-1">
+                <h3 className="font-extrabold text-[11px] sm:text-xs text-slate-900 flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5 text-slate-800" />
                   <span>ثانياً: سجل الدوام والغياب والمغادرات والتأخيرات اليومية</span>
                 </h3>
-                <div className="flex items-center gap-1.5 text-[10px] font-bold">
-                  <span className="text-emerald-800 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">
+                <div className="flex items-center gap-1 text-[9px] font-bold">
+                  <span className="text-emerald-800 bg-emerald-50 border border-emerald-200 px-1 py-0.5 rounded">
                     حضور: {currentSummary.daysPresent} يوم
                   </span>
-                  <span className="text-rose-800 bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded">
+                  <span className="text-rose-800 bg-rose-50 border border-rose-200 px-1 py-0.5 rounded">
                     غياب: {currentSummary.daysAbsent} يوم
                   </span>
-                  <span className="text-amber-800 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded">
+                  <span className="text-amber-800 bg-amber-50 border border-amber-200 px-1 py-0.5 rounded">
                     تأخير: {currentSummary.daysLate} ({currentSummary.totalLateMinutes}د)
                   </span>
                   {currentSummary.totalDepartureHours > 0 && (
-                    <span className="text-indigo-800 bg-indigo-50 border border-indigo-200 px-1.5 py-0.5 rounded">
+                    <span className="text-indigo-800 bg-indigo-50 border border-indigo-200 px-1 py-0.5 rounded">
                       مغادرات: {currentSummary.totalDepartureHours}س
                     </span>
                   )}
@@ -473,17 +473,17 @@ export const EmployeePayslipModal: React.FC<EmployeePayslipModalProps> = ({
               </div>
 
               <div className="border border-slate-200 rounded-lg overflow-hidden">
-                <table className="w-full text-right border-collapse text-xs">
-                  <thead className="bg-[#F8FAFC] text-slate-700 font-bold border-b border-slate-200 text-[11px]">
+                <table className="w-full text-right border-collapse text-[10px]">
+                  <thead className="bg-[#F8FAFC] text-slate-700 font-bold border-b border-slate-200 text-[10px]">
                     <tr>
-                      <th className="p-2 w-10 text-center">#</th>
-                      <th className="p-2">التاريخ واليوم</th>
-                      <th className="p-2 text-center">حالة الدوام</th>
-                      <th className="p-2 text-center">وقت الحضور</th>
-                      <th className="p-2 text-center">المغادرة / إذن</th>
-                      <th className="p-2 text-center">التأخير</th>
-                      <th className="p-2 text-left">الخصم المحتسب</th>
-                      <th className="p-2">البيان والملاحظات</th>
+                      <th className="p-1.5 w-8 text-center">#</th>
+                      <th className="p-1.5">التاريخ واليوم</th>
+                      <th className="p-1.5 text-center">حالة الدوام</th>
+                      <th className="p-1.5 text-center">وقت الحضور</th>
+                      <th className="p-1.5 text-center">المغادرة / إذن</th>
+                      <th className="p-1.5 text-center">التأخير</th>
+                      <th className="p-1.5 text-left">الخصم المحتسب</th>
+                      <th className="p-1.5">البيان والملاحظات</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -492,49 +492,49 @@ export const EmployeePayslipModal: React.FC<EmployeePayslipModalProps> = ({
                         const { deduction, lateDeduction, departureDeduction, reason } = calculateDayDeduction(currentEmployee, rec, settings);
                         return (
                           <tr key={rec.id} className={idx % 2 === 0 ? 'bg-white' : 'bg-[#F8FAFC]/50'}>
-                            <td className="p-2 text-center font-mono font-bold text-slate-400">{idx + 1}</td>
-                            <td className="p-2 font-mono font-bold text-slate-900">
-                              {rec.date} <span className="text-[10px] text-slate-500 font-normal">({getDayOfWeekArabic(rec.date)})</span>
+                            <td className="p-1.5 text-center font-mono font-bold text-slate-400">{idx + 1}</td>
+                            <td className="p-1.5 font-mono font-bold text-slate-900">
+                              {rec.date} <span className="text-[9px] text-slate-500 font-normal">({getDayOfWeekArabic(rec.date)})</span>
                             </td>
 
                             {/* Status */}
-                            <td className="p-2 text-center">
+                            <td className="p-1.5 text-center">
                               {rec.status === 'present' && (
-                                <span className="inline-flex items-center gap-0.5 px-2 py-0.5 bg-emerald-50 text-emerald-800 text-[10px] font-bold rounded border border-emerald-200">
-                                  <CheckCircle2 className="w-2.5 h-2.5 text-emerald-600" />
+                                <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-emerald-50 text-emerald-800 text-[9px] font-bold rounded border border-emerald-200">
+                                  <CheckCircle2 className="w-2 h-2 text-emerald-600" />
                                   <span>حاضر</span>
                                 </span>
                               )}
                               {rec.status === 'absent' && (
-                                <span className="inline-flex items-center gap-0.5 px-2 py-0.5 bg-rose-50 text-rose-800 text-[10px] font-bold rounded border border-rose-200">
-                                  <XCircle className="w-2.5 h-2.5 text-rose-600" />
+                                <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-rose-50 text-rose-800 text-[9px] font-bold rounded border border-rose-200">
+                                  <XCircle className="w-2 h-2 text-rose-600" />
                                   <span>غائب</span>
                                 </span>
                               )}
                               {rec.status === 'late' && (
-                                <span className="inline-flex items-center gap-0.5 px-2 py-0.5 bg-amber-50 text-amber-800 text-[10px] font-bold rounded border border-amber-200">
-                                  <Clock className="w-2.5 h-2.5 text-amber-600" />
+                                <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-amber-50 text-amber-800 text-[9px] font-bold rounded border border-amber-200">
+                                  <Clock className="w-2 h-2 text-amber-600" />
                                   <span>متأخر</span>
                                 </span>
                               )}
                               {rec.status === 'half_day' && (
-                                <span className="inline-flex items-center gap-0.5 px-2 py-0.5 bg-sky-50 text-sky-800 text-[10px] font-bold rounded border border-sky-200">
+                                <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-sky-50 text-sky-800 text-[9px] font-bold rounded border border-sky-200">
                                   <span>نصف يوم</span>
                                 </span>
                               )}
                             </td>
 
                             {/* Check In */}
-                            <td className="p-2 text-center font-mono text-slate-700">
+                            <td className="p-1.5 text-center font-mono text-slate-700">
                               {rec.checkInTime || '—'}
                             </td>
 
                             {/* Departure */}
-                            <td className="p-2 text-center">
+                            <td className="p-1.5 text-center">
                               {rec.departureHours && rec.departureHours > 0 ? (
-                                <span className="inline-flex items-center gap-1 font-bold text-[10px] text-indigo-800 bg-indigo-50 border border-indigo-200 px-1.5 py-0.5 rounded">
-                                  <DoorOpen className="w-2.5 h-2.5 text-indigo-600" />
-                                  <span>{rec.departureHours} ساعة</span>
+                                <span className="inline-flex items-center gap-0.5 font-bold text-[9px] text-indigo-800 bg-indigo-50 border border-indigo-200 px-1 py-0.5 rounded">
+                                  <DoorOpen className="w-2 h-2 text-indigo-600" />
+                                  <span>{rec.departureHours}س</span>
                                   {rec.departureTime && <span className="font-mono">({rec.departureTime})</span>}
                                 </span>
                               ) : (
@@ -543,12 +543,12 @@ export const EmployeePayslipModal: React.FC<EmployeePayslipModalProps> = ({
                             </td>
 
                             {/* Late minutes */}
-                            <td className="p-2 text-center font-mono font-bold text-amber-700">
-                              {rec.lateMinutes && rec.lateMinutes > 0 ? `${rec.lateMinutes} دقيقة` : <span className="text-slate-300 font-normal">—</span>}
+                            <td className="p-1.5 text-center font-mono font-bold text-amber-700">
+                              {rec.lateMinutes && rec.lateMinutes > 0 ? `${rec.lateMinutes}د` : <span className="text-slate-300 font-normal">—</span>}
                             </td>
 
                             {/* Deduction Amount */}
-                            <td className="p-2 font-mono font-bold text-rose-700 text-left">
+                            <td className="p-1.5 font-mono font-bold text-rose-700 text-left">
                               {deduction > 0 ? (
                                 <span>-{formatSYP(deduction)}</span>
                               ) : (
@@ -557,7 +557,7 @@ export const EmployeePayslipModal: React.FC<EmployeePayslipModalProps> = ({
                             </td>
 
                             {/* Reason / Notes */}
-                            <td className="p-2 text-[11px] text-slate-600">
+                            <td className="p-1.5 text-[9.5px] text-slate-600">
                               {rec.note || rec.departureReason || reason || <span className="text-slate-400">—</span>}
                             </td>
                           </tr>
@@ -565,19 +565,19 @@ export const EmployeePayslipModal: React.FC<EmployeePayslipModalProps> = ({
                       })
                     ) : (
                       <tr>
-                        <td colSpan={8} className="p-4 text-center text-slate-400 text-xs italic bg-[#F8FAFC]/30">
+                        <td colSpan={8} className="p-2 text-center text-slate-400 text-[10px] italic bg-[#F8FAFC]/30">
                           لم تسجل أي حركات حضور وغياب لهذا الموظف في هذا الشهر.
                         </td>
                       </tr>
                     )}
                   </tbody>
                   {employeeMonthAttendance.length > 0 && (
-                    <tfoot className="bg-[#FEF2F2]/60 font-bold border-t border-rose-200 text-xs">
+                    <tfoot className="bg-[#FEF2F2]/60 font-bold border-t border-rose-200 text-[10px]">
                       <tr>
-                        <td colSpan={6} className="p-2 text-slate-800">
+                        <td colSpan={6} className="p-1.5 text-slate-800">
                           مجموع استقطاعات الغياب والتأخير والمغادرات:
                         </td>
-                        <td className="p-2 font-mono font-bold text-rose-800 text-left text-sm" colSpan={2}>
+                        <td className="p-1.5 font-mono font-bold text-rose-800 text-left text-xs" colSpan={2}>
                           -{formatSYP(currentSummary.totalDeductions)}
                         </td>
                       </tr>
@@ -588,34 +588,34 @@ export const EmployeePayslipModal: React.FC<EmployeePayslipModalProps> = ({
             </div>
 
             {/* Official Signatures & Stamp Block */}
-            <div className="pt-4 border-t-2 border-slate-300 grid grid-cols-3 gap-4 text-center text-xs">
-              <div className="p-3 bg-[#F8FAFC] rounded-lg border border-slate-200 flex flex-col justify-between h-28">
+            <div className="pt-2 border-t-2 border-slate-300 grid grid-cols-3 gap-2.5 text-center text-[10px]">
+              <div className="p-2 bg-[#F8FAFC] rounded-lg border border-slate-200 flex flex-col justify-between h-20">
                 <div>
                   <p className="font-bold text-slate-900">توقيع المستلم (الموظف)</p>
-                  <p className="text-[10px] text-slate-500 mt-0.5">أقر باستلام كامل مستحقاتي الموضحة أعلاه</p>
+                  <p className="text-[8.5px] text-slate-500">أقر باستلام كامل مستحقاتي الموضحة أعلاه</p>
                 </div>
-                <div className="border-t border-dashed border-slate-300 pt-1">
-                  <p className="text-slate-400 font-mono text-[10px]">توقيع: ...........................</p>
+                <div className="border-t border-dashed border-slate-300 pt-0.5">
+                  <p className="text-slate-400 font-mono text-[9px]">توقيع: ...........................</p>
                 </div>
               </div>
 
-              <div className="p-3 bg-[#F8FAFC] rounded-lg border border-slate-200 flex flex-col justify-between h-28">
+              <div className="p-2 bg-[#F8FAFC] rounded-lg border border-slate-200 flex flex-col justify-between h-20">
                 <div>
                   <p className="font-bold text-slate-900">تدقيق المحاسب المالي</p>
-                  <p className="text-[10px] text-slate-500 mt-0.5">تمت مطابقة السلف والدوام والاستقطاع</p>
+                  <p className="text-[8.5px] text-slate-500">تمت مطابقة السلف والدوام والاستقطاع</p>
                 </div>
-                <div className="border-t border-dashed border-slate-300 pt-1">
-                  <p className="text-slate-400 font-mono text-[10px]">توقيع: ...........................</p>
+                <div className="border-t border-dashed border-slate-300 pt-0.5">
+                  <p className="text-slate-400 font-mono text-[9px]">توقيع: ...........................</p>
                 </div>
               </div>
 
-              <div className="p-3 bg-[#F8FAFC] rounded-lg border border-slate-200 flex flex-col justify-between h-28">
+              <div className="p-2 bg-[#F8FAFC] rounded-lg border border-slate-200 flex flex-col justify-between h-20">
                 <div>
                   <p className="font-bold text-slate-900">اعتماد المدير العام</p>
-                  <p className="text-[10px] text-slate-700 font-bold mt-0.5">{settings.directorName || 'الإدارة العامة'}</p>
+                  <p className="text-[8.5px] text-slate-700 font-bold">{settings.directorName || 'الإدارة العامة'}</p>
                 </div>
-                <div className="border-t border-dashed border-slate-300 pt-1">
-                  <p className="text-slate-400 font-mono text-[10px]">الختم والتوقيع: ....................</p>
+                <div className="border-t border-dashed border-slate-300 pt-0.5">
+                  <p className="text-slate-400 font-mono text-[9px]">الختم والتوقيع: ....................</p>
                 </div>
               </div>
             </div>
