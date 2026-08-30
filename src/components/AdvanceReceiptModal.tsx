@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { SalaryAdvance, CompanySettings } from '../types';
 import { formatSYP, formatArabicDate } from '../utils/formatters';
-import { X, Printer, Receipt, Building2, CheckCircle2 } from 'lucide-react';
+import { X, Printer, Receipt, Building2, Download, CheckCircle2 } from 'lucide-react';
+import { downloadPdfFromElement, triggerPrint } from '../utils/printPdfUtils';
 
 interface AdvanceReceiptModalProps {
   isOpen: boolean;
@@ -16,10 +17,35 @@ export const AdvanceReceiptModal: React.FC<AdvanceReceiptModalProps> = ({
   advance,
   settings,
 }) => {
+  const printableRef = useRef<HTMLDivElement>(null);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const [downloadSuccess, setDownloadSuccess] = useState(false);
+
   if (!isOpen || !advance) return null;
 
   const handlePrint = () => {
-    window.print();
+    triggerPrint();
+  };
+
+  const handleDownloadPdf = async () => {
+    const element = printableRef.current;
+    if (!element) return;
+
+    setIsGeneratingPdf(true);
+    setDownloadSuccess(false);
+
+    try {
+      const safeEmpName = (advance.employeeName || 'موظف').replace(/[^\u0600-\u06FFa-zA-Z0-9_-]/g, '_');
+      const filename = `سند_سلفة_${safeEmpName}_${advance.date}.pdf`;
+      await downloadPdfFromElement(element, filename);
+      setDownloadSuccess(true);
+      setTimeout(() => setDownloadSuccess(false), 3000);
+    } catch (err) {
+      console.error(err);
+      triggerPrint();
+    } finally {
+      setIsGeneratingPdf(false);
+    }
   };
 
   return (
@@ -34,9 +60,29 @@ export const AdvanceReceiptModal: React.FC<AdvanceReceiptModalProps> = ({
           </div>
           <div className="flex items-center gap-1.5">
             <button
+              onClick={handleDownloadPdf}
+              disabled={isGeneratingPdf}
+              id="btn-download-advance-pdf"
+              className="flex items-center gap-1 px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition-all shadow-2xs cursor-pointer disabled:opacity-50"
+            >
+              {isGeneratingPdf ? (
+                <span>جاري التحميل...</span>
+              ) : downloadSuccess ? (
+                <>
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>تم التنزيل</span>
+                </>
+              ) : (
+                <>
+                  <Download className="w-3.5 h-3.5" />
+                  <span>PDF</span>
+                </>
+              )}
+            </button>
+            <button
               onClick={handlePrint}
               id="btn-print-advance-receipt"
-              className="flex items-center gap-1 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition-all shadow-2xs"
+              className="flex items-center gap-1 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition-all shadow-2xs cursor-pointer"
             >
               <Printer className="w-3.5 h-3.5 text-emerald-400" />
               <span>طباعة الإيصال</span>
@@ -52,7 +98,11 @@ export const AdvanceReceiptModal: React.FC<AdvanceReceiptModalProps> = ({
         </div>
 
         {/* Printable Official Receipt Body */}
-        <div className="p-5 sm:p-7 bg-white border border-slate-300 m-3 sm:m-5 rounded-xl shadow-2xs text-right">
+        <div 
+          ref={printableRef}
+          id="advance-receipt-printable" 
+          className="p-5 sm:p-7 bg-white border border-slate-300 m-3 sm:m-5 rounded-xl shadow-2xs text-right"
+        >
           
           {/* Header */}
           <div className="flex items-center justify-between pb-3.5 mb-3.5 border-b-2 border-slate-900">

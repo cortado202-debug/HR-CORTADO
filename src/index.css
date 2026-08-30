@@ -38,13 +38,90 @@ input, select, textarea {
 }
 
 @media print {
-  body {
-    background: white !important;
-    color: black !important;
+  @page {
+    size: auto;
+    margin: 8mm 6mm;
   }
-  .no-print {
+
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+
+  html, body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    width: 100% !important;
+    overflow: visible !important;
+  }
+
+  /* Hide background elements and controls */
+  body > #root > div > header,
+  body > #root > div > main,
+  body > #root > div > footer,
+  .no-print,
+  button,
+  [data-no-print] {
     display: none !important;
   }
+
+  /* Flatten modal overlays so they behave like a standard static document */
+  .fixed.inset-0 {
+    position: static !important;
+    inset: auto !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    display: block !important;
+    z-index: auto !important;
+  }
+
+  .fixed.inset-0 > div {
+    max-width: 100% !important;
+    width: 100% !important;
+    max-height: none !important;
+    height: auto !important;
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background: transparent !important;
+  }
+
+  .overflow-y-auto {
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  /* Target printable document containers specifically */
+  #employee-monthly-statement-printable,
+  #monthly-payroll-table-printable,
+  #advance-receipt-printable {
+    border: 1px solid #94a3b8 !important;
+    box-shadow: none !important;
+    margin: 0 auto !important;
+    padding: 14px 16px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    page-break-inside: auto;
+    background: #ffffff !important;
+  }
+
   .print-only {
     display: block !important;
   }

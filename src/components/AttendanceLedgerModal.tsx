@@ -9,6 +9,7 @@ import {
   computeEmployeeMonthlySummary, 
   calculateDayDeduction 
 } from '../utils/payrollMath';
+import { triggerPrint } from '../utils/printPdfUtils';
 import { 
   X, 
   Calendar, 
@@ -82,7 +83,7 @@ export const AttendanceLedgerModal: React.FC<AttendanceLedgerModalProps> = ({
   const totalDeductionsMonth = monthlySummaries.reduce((sum, s) => sum + (s.absentDeductions + s.lateDeductions + s.halfDayDeductions), 0);
 
   const handlePrint = () => {
-    window.print();
+    triggerPrint();
   };
 
   return (

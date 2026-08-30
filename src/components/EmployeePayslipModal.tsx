@@ -22,8 +22,7 @@ import {
   FileText,
   Receipt
 } from 'lucide-react';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+import { downloadPdfFromElement, triggerPrint } from '../utils/printPdfUtils';
 
 interface EmployeePayslipModalProps {
   isOpen: boolean;
@@ -99,7 +98,7 @@ export const EmployeePayslipModal: React.FC<EmployeePayslipModalProps> = ({
 
   // Print function
   const handlePrint = () => {
-    window.print();
+    triggerPrint();
   };
 
   // High-Resolution PDF Download Function
@@ -111,51 +110,15 @@ export const EmployeePayslipModal: React.FC<EmployeePayslipModalProps> = ({
     setDownloadSuccess(false);
 
     try {
-      // Save current scroll position
-      const originalScrollTop = window.scrollY;
-
-      // Render the printable element to canvas with high resolution
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#ffffff',
-        windowWidth: 1200,
-      });
-
-      const imgData = canvas.toDataURL('image/jpeg', 0.95);
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const pdfWidth = pdf.internal.pageSize.getWidth(); // 210mm
-      const pdfHeight = pdf.internal.pageSize.getHeight(); // 297mm
-
-      const imgWidth = pdfWidth;
-      const imgHeight = (canvas.height * pdfWidth) / canvas.width;
-
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      // First page
-      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pdfHeight;
-
-      // Multi-page loop if height exceeds 1 page
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pdfHeight;
-      }
-
       const safeEmployeeName = currentEmployee.name.replace(/[^\u0600-\u06FFa-zA-Z0-9_-]/g, '_');
       const filename = `كشف_تفصيلي_${safeEmployeeName}_${selectedMonth}.pdf`;
-      pdf.save(filename);
-
+      await downloadPdfFromElement(element, filename);
       setDownloadSuccess(true);
       setTimeout(() => setDownloadSuccess(false), 4000);
-      window.scrollTo(0, originalScrollTop);
     } catch (err) {
       console.error('Error generating PDF:', err);
-      alert('حدث خطأ أثناء تنزيل ملف PDF. يمكنك استخدام زر "طباعة الكشف" لحفظه بصيغة PDF.');
+      // Fallback: trigger print dialog directly for save as PDF
+      triggerPrint();
     } finally {
       setIsGeneratingPdf(false);
     }

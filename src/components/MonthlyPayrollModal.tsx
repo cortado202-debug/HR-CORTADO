@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Employee, AttendanceRecord, SalaryAdvance, CompanySettings, EmployeeMonthlySummary } from '../types';
 import { formatSYP, formatArabicMonth, getTodayDateString } from '../utils/formatters';
 import { computeEmployeeMonthlySummary } from '../utils/payrollMath';
+import { triggerPrint } from '../utils/printPdfUtils';
 import { 
   X, 
   Printer, 
@@ -124,7 +125,7 @@ export const MonthlyPayrollModal: React.FC<MonthlyPayrollModalProps> = ({
   };
 
   const handlePrint = () => {
-    window.print();
+    triggerPrint();
   };
 
   if (!isOpen) return null;
