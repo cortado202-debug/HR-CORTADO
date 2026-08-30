@@ -98,7 +98,7 @@ export const EmployeePayslipModal: React.FC<EmployeePayslipModalProps> = ({
 
   // Print function
   const handlePrint = () => {
-    triggerPrint();
+    triggerPrint(printableRef.current, `كشف حساب - ${currentEmployee.name} - ${selectedMonth}`);
   };
 
   // High-Resolution PDF Download Function
@@ -118,7 +118,7 @@ export const EmployeePayslipModal: React.FC<EmployeePayslipModalProps> = ({
     } catch (err) {
       console.error('Error generating PDF:', err);
       // Fallback: trigger print dialog directly for save as PDF
-      triggerPrint();
+      triggerPrint(element, `كشف حساب - ${currentEmployee.name} - ${selectedMonth}`);
     } finally {
       setIsGeneratingPdf(false);
     }

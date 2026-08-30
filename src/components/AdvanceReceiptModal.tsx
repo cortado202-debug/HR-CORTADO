@@ -24,7 +24,7 @@ export const AdvanceReceiptModal: React.FC<AdvanceReceiptModalProps> = ({
   if (!isOpen || !advance) return null;
 
   const handlePrint = () => {
-    triggerPrint();
+    triggerPrint(printableRef.current, `سند سلفة - ${advance.employeeName || 'موظف'}`);
   };
 
   const handleDownloadPdf = async () => {
@@ -42,7 +42,7 @@ export const AdvanceReceiptModal: React.FC<AdvanceReceiptModalProps> = ({
       setTimeout(() => setDownloadSuccess(false), 3000);
     } catch (err) {
       console.error(err);
-      triggerPrint();
+      triggerPrint(element, `سند سلفة - ${advance.employeeName || 'موظف'}`);
     } finally {
       setIsGeneratingPdf(false);
     }

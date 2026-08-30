@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { Employee, AttendanceRecord, SalaryAdvance, CompanySettings, EmployeeMonthlySummary } from '../types';
 import { formatSYP, formatArabicMonth, getTodayDateString } from '../utils/formatters';
 import { computeEmployeeMonthlySummary } from '../utils/payrollMath';
@@ -124,8 +124,10 @@ export const MonthlyPayrollModal: React.FC<MonthlyPayrollModalProps> = ({
     document.body.removeChild(link);
   };
 
+  const printablePayrollRef = useRef<HTMLDivElement>(null);
+
   const handlePrint = () => {
-    triggerPrint();
+    triggerPrint(printablePayrollRef.current, `كشف مسيرات الرواتب - ${selectedMonth}`);
   };
 
   if (!isOpen) return null;
@@ -198,8 +200,10 @@ export const MonthlyPayrollModal: React.FC<MonthlyPayrollModalProps> = ({
           </div>
         </div>
 
-        {/* Printable Header (Visible only when printing) */}
-        <div className="hidden print-only p-6 border-b border-black text-center">
+        {/* Printable Area Wrapper */}
+        <div ref={printablePayrollRef} id="monthly-payroll-table-printable" className="flex flex-col flex-1 overflow-y-auto">
+          {/* Printable Header (Visible only when printing) */}
+          <div className="hidden print-only p-6 border-b border-black text-center">
           <div className="flex items-center justify-between">
             <div className="text-right">
               <h1 className="text-2xl font-bold text-black">{settings.companyName}</h1>
@@ -393,19 +397,20 @@ export const MonthlyPayrollModal: React.FC<MonthlyPayrollModalProps> = ({
           </table>
         </div>
 
-        {/* Printable Signatures footer */}
-        <div className="hidden print-only p-8 pt-12 mt-8 border-t border-black grid grid-cols-3 gap-8 text-center text-xs">
-          <div>
-            <p className="font-bold mb-8">إعداد مسؤول شؤون الموظفين</p>
-            <p className="border-t border-gray-400 pt-1">التوقيع: .....................</p>
-          </div>
-          <div>
-            <p className="font-bold mb-8">تدقيق المحاسب المالي</p>
-            <p className="border-t border-gray-400 pt-1">التوقيع: .....................</p>
-          </div>
-          <div>
-            <p className="font-bold mb-8">اعتماد المدير العام ({settings.directorName})</p>
-            <p className="border-t border-gray-400 pt-1">الختم والتوقيع: .....................</p>
+          {/* Printable Signatures footer */}
+          <div className="hidden print-only p-8 pt-12 mt-8 border-t border-black grid grid-cols-3 gap-8 text-center text-xs">
+            <div>
+              <p className="font-bold mb-8">إعداد مسؤول شؤون الموظفين</p>
+              <p className="border-t border-gray-400 pt-1">التوقيع: .....................</p>
+            </div>
+            <div>
+              <p className="font-bold mb-8">تدقيق المحاسب المالي</p>
+              <p className="border-t border-gray-400 pt-1">التوقيع: .....................</p>
+            </div>
+            <div>
+              <p className="font-bold mb-8">اعتماد المدير العام ({settings.directorName})</p>
+              <p className="border-t border-gray-400 pt-1">الختم والتوقيع: .....................</p>
+            </div>
           </div>
         </div>
 

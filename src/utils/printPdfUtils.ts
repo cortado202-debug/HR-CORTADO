@@ -2,8 +2,7 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
 /**
- * Robustly downloads a DOM element as a high-resolution PDF.
- * Uses html2canvas with DOM cloning and CSS sanitization (removing unsupported oklch/backdrop filters).
+ * Downloads a DOM element strictly as a single-page high-resolution A4 PDF.
  */
 export async function downloadPdfFromElement(
   element: HTMLElement,
@@ -55,7 +54,9 @@ export async function downloadPdfFromElement(
     });
 
     // Remove cloned element
-    document.body.removeChild(clone);
+    if (clone.parentNode) {
+      clone.parentNode.removeChild(clone);
+    }
 
     const imgData = canvas.toDataURL('image/jpeg', 0.96);
     const pdf = new jsPDF('p', 'mm', 'a4');
@@ -89,15 +90,143 @@ export async function downloadPdfFromElement(
     return true;
   } catch (error) {
     console.error('downloadPdfFromElement error:', error);
-    // Fallback: trigger print dialog directly which allows "Save as PDF" natively in all browsers
-    window.print();
+    triggerPrint(element);
     return true;
   }
 }
 
 /**
- * Triggers native high-quality vector printing for any printable element or modal
+ * Triggers completely isolated print mode for an element.
+ * Creates an isolated print iframe so background modals, parent tables, or backdrop layers
+ * are NEVER included in the print preview. Only the single desired document is printed!
  */
-export function triggerPrint(): void {
-  window.print();
+export function triggerPrint(
+  target: HTMLElement | string | null = null,
+  documentTitle: string = 'طباعة المستند'
+): void {
+  let element: HTMLElement | null = null;
+  if (typeof target === 'string') {
+    element = document.getElementById(target);
+  } else if (target instanceof HTMLElement) {
+    element = target;
+  }
+
+  // If no specific element provided, try to find any active printable modal element
+  if (!element) {
+    element = 
+      document.getElementById('employee-monthly-statement-printable') ||
+      document.getElementById('advance-receipt-printable') ||
+      document.getElementById('monthly-payroll-table-printable') ||
+      document.getElementById('attendance-ledger-printable');
+  }
+
+  if (!element) {
+    window.print();
+    return;
+  }
+
+  try {
+    // Remove any existing print iframe
+    const existingIframe = document.getElementById('isolated-print-iframe');
+    if (existingIframe && existingIframe.parentNode) {
+      existingIframe.parentNode.removeChild(existingIframe);
+    }
+
+    // Create an isolated hidden iframe
+    const iframe = document.createElement('iframe');
+    iframe.setAttribute('id', 'isolated-print-iframe');
+    iframe.style.position = 'fixed';
+    iframe.style.right = '0';
+    iframe.style.bottom = '0';
+    iframe.style.width = '0';
+    iframe.style.height = '0';
+    iframe.style.border = '0';
+    iframe.style.visibility = 'hidden';
+    document.body.appendChild(iframe);
+
+    const iframeDoc = iframe.contentWindow?.document || iframe.contentDocument;
+    if (!iframeDoc || !iframe.contentWindow) {
+      window.print();
+      return;
+    }
+
+    // Collect all stylesheet tags from the parent document
+    const styleTags = Array.from(document.querySelectorAll('style, link[rel="stylesheet"]'))
+      .map((node) => node.outerHTML)
+      .join('\n');
+
+    iframeDoc.open();
+    iframeDoc.write(`
+      <!DOCTYPE html>
+      <html lang="ar" dir="rtl">
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>${documentTitle}</title>
+          ${styleTags}
+          <style>
+            @page {
+              size: A4 portrait;
+              margin: 6mm 8mm;
+            }
+            *, *::before, *::after {
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+              color-adjust: exact !important;
+              box-shadow: none !important;
+            }
+            html, body {
+              background: #ffffff !important;
+              color: #000000 !important;
+              margin: 0 !important;
+              padding: 0 !important;
+              width: 100% !important;
+              height: auto !important;
+              font-family: inherit;
+            }
+            .no-print, button, [data-no-print] {
+              display: none !important;
+            }
+            #isolated-print-wrapper {
+              width: 100% !important;
+              max-width: 100% !important;
+              margin: 0 auto !important;
+              page-break-inside: avoid !important;
+              break-inside: avoid !important;
+            }
+            #isolated-print-wrapper > div {
+              margin: 0 !important;
+              box-shadow: none !important;
+            }
+          </style>
+        </head>
+        <body class="bg-white text-slate-900">
+          <div id="isolated-print-wrapper">
+            ${element.outerHTML}
+          </div>
+        </body>
+      </html>
+    `);
+    iframeDoc.close();
+
+    // Allow styles to parse and render, then invoke isolated print dialog
+    setTimeout(() => {
+      try {
+        iframe.contentWindow?.focus();
+        iframe.contentWindow?.print();
+      } catch (err) {
+        console.error('Iframe print error:', err);
+        window.print();
+      } finally {
+        setTimeout(() => {
+          if (iframe.parentNode) {
+            iframe.parentNode.removeChild(iframe);
+          }
+        }, 1500);
+      }
+    }, 300);
+  } catch (e) {
+    console.error('triggerPrint error:', e);
+    window.print();
+  }
 }
