@@ -1,0 +1,6 @@
+{
+  "name": "سلف وحضور الموظفين | SYP Payroll & Attendance",
+  "description": "منظومة سحابية متكاملة وفورية لإدارة حضور وغياب الموظفين وتسجيل السلف المالية بالليرة السورية مع حساب صافي الرواتب والمزامنة اللحظية بين الأجهزة.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
