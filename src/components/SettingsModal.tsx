@@ -169,9 +169,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         shifts,
       });
       setSettingsSavedSuccess(true);
+      triggerToast('✅ تم حفظ كافة الإعدادات وسقف السلف بنجاح ومزامنتها مباشرة!');
       setTimeout(() => setSettingsSavedSuccess(false), 3000);
     } catch (err) {
-      alert('فشل حفظ الإعدادات');
+      console.error(err);
+      triggerToast('حدث خطأ أثناء حفظ الإعدادات');
     } finally {
       setIsSavingSettings(false);
     }

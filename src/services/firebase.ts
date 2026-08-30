@@ -2,15 +2,20 @@ import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 
 export const firebaseConfig = {
+  projectId: "hr-cortado",
+  appId: "1:494203077942:web:74e5030e813846d0039f97",
   apiKey: "AIzaSyDHo7Yehpd59DsN50wYj20NosbBeMVFGak",
   authDomain: "hr-cortado.firebaseapp.com",
-  projectId: "hr-cortado",
+  firestoreDatabaseId: "ai-studio-syppayrollattend-24bbfac8-c945-4bc8-b738-3bbd63c0d652",
   storageBucket: "hr-cortado.firebasestorage.app",
   messagingSenderId: "494203077942",
-  appId: "1:494203077942:web:5e702fd179ccc27e039f97",
-  measurementId: "G-9EP6C12557"
 };
 
 // Initialize or reuse Firebase App
 export const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-export const db = getFirestore(app);
+
+// Target the specific firestore database ID or fallback
+export const db = firebaseConfig.firestoreDatabaseId 
+  ? getFirestore(app, firebaseConfig.firestoreDatabaseId)
+  : getFirestore(app);
+

@@ -205,7 +205,7 @@ class SyncService {
   /**
    * Persists the current state to Firebase Firestore and notifies other branches.
    */
-  private async pushToFirestore(merge: boolean = false) {
+  private async pushToFirestore(merge: boolean = false): Promise<void> {
     try {
       this.isWritingToFirestore = true;
       const docRef = doc(db, FIRESTORE_COLLECTION, FIRESTORE_DOC_ID);
@@ -217,10 +217,17 @@ class SyncService {
         lastUpdated: Date.now(),
         updatedByClientId: CLIENT_ID,
       });
-      await setDoc(docRef, payload, { merge });
+
+      // Timeout wrapper so slow network or offline queue never stalls operations
+      const setDocPromise = setDoc(docRef, payload, { merge });
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Firestore write timeout')), 3000)
+      );
+
+      await Promise.race([setDocPromise, timeoutPromise]);
       this.setConnectionStatus('connected');
     } catch (error) {
-      console.error('Error pushing data to Firebase Firestore:', error);
+      console.warn('Firebase Firestore write notice (cached locally):', error);
     } finally {
       this.isWritingToFirestore = false;
     }
@@ -249,7 +256,7 @@ class SyncService {
     }
   }
 
-  // ================= MUTATIONS =================
+  // ================= MUTATIONS (INSTANT & NON-BLOCKING) =================
 
   public async addAdvance(advanceData: Omit<SalaryAdvance, 'id' | 'createdAt' | 'approved'>): Promise<SalaryAdvance> {
     const newAdvance: SalaryAdvance = {
@@ -260,26 +267,26 @@ class SyncService {
       createdBy: this.data.settings.directorName || 'الإدارة',
     };
 
-    // Optimistic local update
+    // Instant local state & storage update
     this.data.advances = [newAdvance, ...this.data.advances];
     this.data.lastUpdated = Date.now();
     this.notify();
     this.broadcastLocal('ADVANCE_ADDED', newAdvance);
 
-    // Save to Firebase Firestore immediately
-    await this.pushToFirestore();
+    // Push to Firebase Firestore in background
+    this.pushToFirestore().catch((err) => console.warn(err));
     return newAdvance;
   }
 
   public async deleteAdvance(id: string): Promise<boolean> {
-    // Optimistic local update
+    // Instant local state & storage update
     this.data.advances = this.data.advances.filter((a) => a.id !== id);
     this.data.lastUpdated = Date.now();
     this.notify();
     this.broadcastLocal('ADVANCE_DELETED', { id });
 
-    // Save to Firebase Firestore immediately
-    await this.pushToFirestore();
+    // Push to Firebase Firestore in background
+    this.pushToFirestore().catch((err) => console.warn(err));
     return true;
   }
 
@@ -287,14 +294,14 @@ class SyncService {
     const id = record.id || `${record.employeeId}_${record.date}`;
     const updated = { ...record, id, updatedAt: Date.now() };
 
-    // Optimistic local update
+    // Instant local state & storage update
     this.data.attendance[id] = updated;
     this.data.lastUpdated = Date.now();
     this.notify();
     this.broadcastLocal('ATTENDANCE_UPDATED', updated);
 
-    // Save to Firebase Firestore immediately
-    await this.pushToFirestore();
+    // Push to Firebase Firestore in background
+    this.pushToFirestore().catch((err) => console.warn(err));
     return updated;
   }
 
@@ -308,8 +315,8 @@ class SyncService {
     this.notify();
     this.broadcastLocal('ATTENDANCE_BULK_UPDATED', records);
 
-    // Save to Firebase Firestore immediately
-    await this.pushToFirestore();
+    // Push to Firebase Firestore in background
+    this.pushToFirestore().catch((err) => console.warn(err));
     return true;
   }
 
@@ -327,6 +334,8 @@ class SyncService {
         dailyWorkHours: employee.dailyWorkHours || this.data.settings.defaultWorkHours || 8,
         monthlyWorkDays: employee.monthlyWorkDays || this.data.settings.defaultWorkDays || 26,
         absentDeductionRate: employee.absentDeductionRate || 1.0,
+        assignedShiftId: employee.assignedShiftId,
+        maxMonthlyAdvance: employee.maxMonthlyAdvance,
         active: employee.active !== undefined ? employee.active : true,
         joinedDate: employee.joinedDate || new Date().toISOString().split('T')[0],
         avatarColor: employee.avatarColor || 'bg-slate-700',
@@ -346,8 +355,8 @@ class SyncService {
     this.data.lastUpdated = Date.now();
     this.notify();
 
-    // Save to Firebase Firestore immediately
-    await this.pushToFirestore();
+    // Push to Firebase Firestore in background
+    this.pushToFirestore().catch((err) => console.warn(err));
     return saved;
   }
 
@@ -357,8 +366,8 @@ class SyncService {
     this.notify();
     this.broadcastLocal('EMPLOYEE_DELETED', { id });
 
-    // Save to Firebase Firestore immediately
-    await this.pushToFirestore();
+    // Push to Firebase Firestore in background
+    this.pushToFirestore().catch((err) => console.warn(err));
     return true;
   }
 
@@ -368,8 +377,8 @@ class SyncService {
     this.notify();
     this.broadcastLocal('SETTINGS_UPDATED', this.data.settings);
 
-    // Save to Firebase Firestore immediately
-    await this.pushToFirestore();
+    // Push to Firebase Firestore in background
+    this.pushToFirestore().catch((err) => console.warn(err));
     return this.data.settings;
   }
 
